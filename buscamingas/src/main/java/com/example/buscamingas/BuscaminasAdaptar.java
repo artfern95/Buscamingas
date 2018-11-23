@@ -1,5 +1,6 @@
 package com.example.buscamingas;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,90 +8,68 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.example.buscamingas.Celdas.Casilla;
 
-public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.ExampleViewHolder> {
+public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.CasillaHolder> {
 
-    private ArrayList<BuscaminasItem> mExampleList;
-    //(2) Se define un atributo que es el listener
-    private OnItemClickListener mListener;
+    private LayoutInflater inflater;
+    private Context context;
 
-    //(1) Se crea una interfaz dentro de la clase Adapter
-    public interface OnItemClickListener{
-        //Se define un método al que se le pasará la posición con el item (fila) que ha sido dada click
-        void OnItemClick(int position);
-    }
+    public BuscaminasAdaptar(Context context) {
 
-    //(3) Método set para fijar el listener asociado a la clase Adapter
-    public void setOnClickListener(OnItemClickListener listener){
-        mListener=listener;
-    }
-
-    public BuscaminasAdaptar(ArrayList<BuscaminasItem> exampleList) {
-        mExampleList=exampleList;
+        this.context = context;
+        inflater = LayoutInflater.from(context);
     }
 
     //Crea vista
     @NonNull
     @Override
-    public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem,parent,false);
-        ExampleViewHolder exampleViewHolder=new ExampleViewHolder(v,mListener);
+    public CasillaHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item,parent,false);
+        CasillaHolder exampleViewHolder=new CasillaHolder(v);
         return exampleViewHolder;
     }
 
     //Rellena vista
     @Override
-    public void onBindViewHolder(@NonNull ExampleViewHolder holder, int position) {
-        BuscaminasItem currentItem=mExampleList.get(position);
+    public void onBindViewHolder(@NonNull CasillaHolder holder, int position) {
 
-        holder.mImageView.setImageResource(currentItem.getImageResource());
-        holder.mTextView1.setText(currentItem.getText1());
-
-
+        holder.casilla.setPosicion(position);
     }
 
     @Override
     public int getItemCount() {
 
-        return mExampleList.size();
+        return Logica.getInstance().getLargo() * Logica.getInstance().getAncho();
     }
 
-
     //Class estática por recomendación del API
-    public static class ExampleViewHolder extends RecyclerView.ViewHolder{
+    public class CasillaHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        ImageView mImageView;
-        TextView mTextView1;
+        private Casilla casilla;
 
-        //(4) se le pasa como parámetro OnItemClickListener ya que la clase es estática
-        //sino no tendría visibilidad del listener
-        public ExampleViewHolder(View itemView, final OnItemClickListener listener){
+        public CasillaHolder(View itemView) {
             super(itemView);
-            mImageView=itemView.findViewById(R.id.imageView);
-            mTextView1=itemView.findViewById(R.id.textView);
-            /*(4)Este es el método en el que se apoya todo (el onClick), tenemos un listener para cada
-            ViewHolder, es decir para cada elemento de la lista asociado a una posición. Está
-            dentro del contructor, de forma que al contruir un ViewHolder se le asocia un listener
-            que es identificado por una posición (DE LOS ELEMENTOS VISIBLES)
-             */
-            itemView.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    if (listener!=null){
-                        //El adapter es el que sabe la posición absoluta dentro de la vista,
-                        int position=getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION){
-                            //Fijamos un listener para cada elemento de la lista
-                            //Vamos al MainActivity...
-                            listener.OnItemClick(position);
-                        }
-                    }
-                }
-            });
+            casilla = itemView.findViewById(R.id.Casilla);
+            casilla.setOnLongClickListener(this);
+            casilla.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            Toast.makeText(context,"Onclick",Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+
+            Toast.makeText(context,"OnLongClick",Toast.LENGTH_SHORT).show();
+            return false;
         }
 
     }

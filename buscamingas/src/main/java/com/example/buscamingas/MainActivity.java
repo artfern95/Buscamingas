@@ -21,8 +21,6 @@ public class MainActivity extends AppCompatActivity {
     //Lo cambiamos: private RecyclerView.Adapter adapter;
     private BuscaminasAdaptar adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<BuscaminasItem> casillaList=new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,33 +38,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        for(int i=0;i<=63;i++){//10 bombas
-            casillaList.add(new BuscaminasItem(R.drawable.ic_audio,""+i));
-        }
-
         recyclerView=findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
         //layoutManager=new LinearLayoutManager(this);
 
         layoutManager=new GridLayoutManager(this,8);
-        adapter=new BuscaminasAdaptar(casillaList);
+        adapter=new BuscaminasAdaptar(this);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
-        adapter.setOnClickListener(new BuscaminasAdaptar.OnItemClickListener() {
-            @Override
-            public void OnItemClick(int position) {
-                //(5) Aqui metemos la logica de respuesta
-                casillaList.get(position).setmText1("Clicked");
-                casillaList.get(position).setmImageResource(R.drawable.ic_sun);
-                //hay que indicar al adapter que un elemento de la lista ha cambiado
-                // para que lo gestione.
-                adapter.notifyItemChanged(position);
-                Toast.makeText(MainActivity.this, "Elemento pulsado:"+position, Toast.LENGTH_SHORT).show();
-            }
-        });
 
         /*Paul es un follador nato
         * Listener para ocultar el boton de juego nuevo
