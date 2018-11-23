@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Buscaminas</string>
+    <string name="action_settings">Settings</string>
+    <string name="search" />
+    <string name="add" />
+    <string name="agenda" />
+</resources>
