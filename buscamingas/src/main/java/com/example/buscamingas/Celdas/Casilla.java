@@ -6,8 +6,8 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.Button;
 
+import com.example.buscamingas.Logica;
 import com.example.buscamingas.R;
 
 public class Casilla extends android.support.v7.widget.AppCompatButton {
@@ -49,8 +49,8 @@ public class Casilla extends android.support.v7.widget.AppCompatButton {
         //Dividir posicion entre largo del tablero para obtener
         //las coordenadas x e y
 
-        x = posicion % 8;
-        y = posicion / 8;
+        x = posicion % Logica.getInstance().getLargo();
+        y = posicion / Logica.getInstance().getLargo();
     }
 
     public void setPosicion(int x, int y){
@@ -58,7 +58,7 @@ public class Casilla extends android.support.v7.widget.AppCompatButton {
         this.x = x;
         this.y = y;
 
-        posicion = y * 8 + x;
+        posicion = y * Logica.getInstance().getLargo() + x;
     }
 
     public int getValor() {
