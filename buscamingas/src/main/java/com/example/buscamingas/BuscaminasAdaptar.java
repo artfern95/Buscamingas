@@ -26,8 +26,8 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
     @Override
     public BuscaminasItem onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item,parent,false);
-        BuscaminasItem exampleViewHolder=new BuscaminasItem(v);
+        View celda = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item,parent,false);
+        BuscaminasItem exampleViewHolder = new BuscaminasItem(celda);
         return exampleViewHolder;
     }
 
@@ -67,6 +67,8 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
         @Override
         public void onClick(View v) {
 
+            casilla.setVisible();
+            casilla.setClick();
             //Respuesta al hacer click en la celda
             Toast.makeText(context,"Onclick",Toast.LENGTH_SHORT).show();
         }

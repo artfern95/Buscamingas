@@ -89,7 +89,9 @@ public class Casilla extends android.support.v7.widget.AppCompatButton {
     }
 
     public void setClick() {
+
         click = true;
+        invalidate();
     }
 
     public void setClick(boolean b) {
@@ -113,7 +115,9 @@ public class Casilla extends android.support.v7.widget.AppCompatButton {
     }
 
     public void setVisible() {
+
         visible = true;
+        invalidate();
     }
 
     public boolean getBomba(){

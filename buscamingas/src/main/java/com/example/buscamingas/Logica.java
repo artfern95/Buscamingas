@@ -89,7 +89,7 @@ public class Logica {
                 tablero[i][e] = CalculaMinasCercanas(i,e);
             }
         }
-        
+
 
         String valor = "";
 
