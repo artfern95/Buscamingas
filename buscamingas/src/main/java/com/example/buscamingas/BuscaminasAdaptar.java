@@ -10,15 +10,19 @@ import android.widget.Toast;
 
 import com.example.buscamingas.Celdas.Casilla;
 
+import java.util.ArrayList;
+
 public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.BuscaminasItem> {
 
     private LayoutInflater inflater;
     private Context context;
+    private ArrayList<Casilla> casillas;
 
     public BuscaminasAdaptar(Context context) {
 
         this.context = context;
         inflater = LayoutInflater.from(context);
+        casillas = new ArrayList<>();
     }
 
     //Crea vista
@@ -40,6 +44,36 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
 
         //Valor de la celda: si es mina o el número de minas cercas
         holder.casilla.setValor(Logica.getInstance().getValorCelda(position));
+    }
+
+    public void Click(int x, int y){
+
+        if((x>=0) && (x<Logica.getInstance().getLargo()) && (y>=0) && (y<Logica.getInstance().getAncho()) &&
+                !getCasilla(x,y).isClick() && !getCasilla(x,y).isVisible() && !getCasilla(x,y).isOnlongclick()){
+
+            getCasilla(x,y).setClick();
+
+            //si es celda libre 'valor = 0'
+            if(getCasilla(x,y).getValor() == 0){
+
+            }
+
+            //Si es bomba, en este caso seria fin del juego
+            if(getCasilla(x,y).getValor() == -1){
+
+            }
+        }
+    }
+
+    public void LongCLick(){
+
+    }
+
+    public Casilla getCasilla(int x, int y){
+
+        int pos = y * Logica.getInstance().getLargo() + x;
+
+        return casillas.get(pos);
     }
 
     @Override
