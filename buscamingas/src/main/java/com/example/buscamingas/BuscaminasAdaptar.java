@@ -1,6 +1,8 @@
 package com.example.buscamingas;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -70,12 +72,74 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
             //Si es bomba, en este caso seria fin del juego
             if(getCasilla(x,y).getValor() == -1){
 
+                finJuego();
             }
         }
     }
 
-    public void LongCLick(){
+    public void LongCLick(int x, int y){
 
+        //Comprobamos que no este con click o longclick
+        if((!getCasilla(x, y).isOnlongclick()) && (!getCasilla(x, y).isVisible()) && (!getCasilla(x, y).isClick())){
+
+            //Si hay bomba
+            if(getCasilla(x, y).getBomba() == true){//Hay bomba, se marca la bomba
+
+                //Descubrimos la casilla
+                getCasilla(x, y).setVisible();
+                Logica.getInstance().restarBombas();//Restamos al contador de bombas restantes
+
+                //Revisamos el numero de bombas que quedan
+                if(Logica.getInstance().getContBombas() == 0){
+                    //FIN DEL JUEGO
+                    finJuego();
+                }
+            }
+
+            //Si no hay bomba: fin del juego
+            else{
+
+            }
+        }
+    }
+
+    public void DialogFinDelJuego(){
+
+        AlertDialog.Builder alertdialogBuilder = new AlertDialog.Builder(context);
+
+        alertdialogBuilder.setTitle("Fin del juego");
+
+        alertdialogBuilder.setMessage("¿Quieres volver a jugar?").setCancelable(false);
+        alertdialogBuilder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //Reinicas el juego
+                Logica.getInstance().IniciarJuego();
+            }
+        });
+
+        alertdialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //Salir
+                System.exit(0);
+            }
+        });
+
+        alertdialogBuilder.show();
+    }
+
+    public void finJuego(){
+        //Recorre array de casillas comprobando que tenga boma para hacerlas visibles
+        for(int i=0;i<casillas.size();i++){
+            if(casillas.get(i).getBomba() == true){
+                casillas.get(i).setVisible();
+            }
+        }
+
+        DialogFinDelJuego();
     }
 
     public Casilla getCasilla(int x, int y){

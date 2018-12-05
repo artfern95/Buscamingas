@@ -13,9 +13,10 @@ public class Logica {
 
     private static final Logica ourInstance = new Logica();
 
-    private int Largo;
-    private int Ancho;
-    private int NBombas;
+    private int largo;
+    private int ancho;
+    private int nBombas;
+    private int contBombas;
 
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView recyclerView;
@@ -39,15 +40,16 @@ public class Logica {
         this.recyclerView = recyclerView;
         this.context = context;
 
-        Largo = 8;
-        Ancho = 8;
-        NBombas = 12;
+        largo = 8;
+        ancho = 8;
+        nBombas = 12;
+        contBombas = nBombas;
 
         mapBoom = new ArrayList<>();
 
         CrearTablero();
 
-        layoutManager = new GridLayoutManager(context,Largo);
+        layoutManager = new GridLayoutManager(context, largo);
         buscaminasAdaptar = new BuscaminasAdaptar(context);
 
         recyclerView.setLayoutManager(layoutManager);
@@ -57,17 +59,17 @@ public class Logica {
 
     public void CrearTablero() {
 
-        tablero = new int[Largo][Ancho];
+        tablero = new int[largo][ancho];
 
         Random num = new Random();
 
-        int nbombas = NBombas;
+        int nbombas = nBombas;
 
         while(nbombas > 0){
 
             //Posiciones x,y para colocar la bomba de forma aleatoria
-            int x = num.nextInt(Largo);
-            int y = num.nextInt(Ancho);
+            int x = num.nextInt(largo);
+            int y = num.nextInt(ancho);
 
             /*Solo pondra en aquellas posiciones que esten libres
             * de lo conrtrario el numero de bombas no disminuye*/
@@ -82,9 +84,9 @@ public class Logica {
         /*Recorremos posicion por posicion para establecer su valor
         Este valor depende del numero de bombas que tenga cerca, una casiila
         en todas las direcciones*/
-        for (int i = 0; i < Largo; i++) {
+        for (int i = 0; i < largo; i++) {
 
-            for (int e = 0; e < Ancho; e++) {
+            for (int e = 0; e < ancho; e++) {
 
                 tablero[i][e] = CalculaMinasCercanas(i,e);
             }
@@ -93,11 +95,11 @@ public class Logica {
 
         String valor = "";
 
-        for(int i = 0 ; i < Ancho ; i ++){
+        for(int i = 0; i < ancho; i ++){
 
             valor = " | ";
 
-            for(int e = 0 ; e < Largo ; e ++){
+            for(int e = 0; e < largo; e ++){
 
                 valor = valor + String.valueOf(tablero[e][i]).replace("9","B") + " | ";
             }
@@ -124,7 +126,7 @@ public class Logica {
 
                 for (int e = y - 1; e <= y + 1; e++) {
 
-                    if(i < Largo && i >= 0 && e < Ancho && e >= 0){
+                    if(i < largo && i >= 0 && e < ancho && e >= 0){
 
                         if(tablero[i][e] == -1){
 
@@ -138,35 +140,43 @@ public class Logica {
         }
     }
 
+    public int getContBombas() {
+        return contBombas;
+    }
+
+    public void restarBombas() {
+        contBombas--;
+    }
+
     public int getLargo() {
-        return Largo;
+        return largo;
     }
 
     public void setLargo(int largo) {
-        Largo = largo;
+        this.largo = largo;
     }
 
     public int getAncho() {
-        return Ancho;
+        return ancho;
     }
 
     public void setAncho(int ancho) {
-        Ancho = ancho;
+        this.ancho = ancho;
     }
 
     public int getValorCelda(int pos){
 
-        int x = pos % Largo;
-        int y = pos / Largo;
+        int x = pos % largo;
+        int y = pos / largo;
 
         return tablero[x][y];
     }
 
-    public int getNBombas() {
-        return NBombas;
+    public int getnBombas() {
+        return nBombas;
     }
 
-    public void setNBombas(int NBombas) {
-        this.NBombas = NBombas;
+    public void setnBombas(int nBombas) {
+        this.nBombas = nBombas;
     }
 }
