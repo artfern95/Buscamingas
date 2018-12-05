@@ -59,8 +59,10 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
                 for(int i = -1; i <= 1; i ++){
 
                     for(int e = -1; e <= 1; e ++){
-                    
-                        Click(x+i,y+e);
+
+                        if(i != e) {
+                            Click(x + i, y + e);
+                        }
                     }
                 }
             }
@@ -99,6 +101,7 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
             super(itemView);
 
             casilla = itemView.findViewById(R.id.Casilla);
+            casillas.add(casilla);
 
             //Establecemos los listener
             casilla.setOnLongClickListener(this);
