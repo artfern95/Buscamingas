@@ -56,6 +56,13 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
             //si es celda libre 'valor = 0'
             if(getCasilla(x,y).getValor() == 0){
 
+                for(int i = -1; i <= 1; i ++){
+
+                    for(int e = -1; e <= 1; e ++){
+                    
+                        Click(x+i,y+e);
+                    }
+                }
             }
 
             //Si es bomba, en este caso seria fin del juego
