@@ -111,8 +111,7 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
         @Override
         public void onClick(View v) {
 
-            casilla.setVisible();
-            casilla.setClick();
+            Click(casilla.getXp(),casilla.getYp());
             //Respuesta al hacer click en la celda
             Toast.makeText(context,"Onclick",Toast.LENGTH_SHORT).show();
         }
