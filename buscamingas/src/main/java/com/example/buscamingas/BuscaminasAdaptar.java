@@ -12,18 +12,40 @@ import android.view.ViewGroup;
 import com.example.buscamingas.Celdas.Casilla;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.BuscaminasItem> {
 
     private LayoutInflater inflater;
     private Context context;
-    private ArrayList<Casilla> casillas;
+
+    //
+    private int Largo;
+    private int Ancho;
+    private int NBombas;
+    private int contBombas;
+
+    //Arraylist con las vistas del tablero
+    //para controlar los estados y hacerlas visibles
+    //o al inversa
+    private ArrayList<Casilla> mapBoom;
+
+    //Array con las bombas y los valores de las casillas
+    //dichos valores son el número de bombas que tiene cerca
+    private int [][] tablero ;
 
     public BuscaminasAdaptar(Context context) {
 
         this.context = context;
         inflater = LayoutInflater.from(context);
-        casillas = new ArrayList<>();
+        mapBoom = new ArrayList<>();
+
+        Largo = 8;
+        Ancho = 8;
+        NBombas = 12;
+        contBombas = NBombas;
+
+        CrearTablero();
     }
 
     //Crea vista
@@ -33,6 +55,7 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
 
         View celda = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item,parent,false);
         BuscaminasItem exampleViewHolder = new BuscaminasItem(celda);
+
         return exampleViewHolder;
     }
 
@@ -44,12 +67,12 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
         holder.casilla.setPosicion(position);
 
         //Valor de la celda: si es mina o el número de minas cercas
-        holder.casilla.setValor(Logica.getInstance().getValorCelda(position));
+        holder.casilla.setValor(getValorCasilla(position));
     }
 
     public void Click(int x, int y){
 
-        if((x>=0) && (x<Logica.getInstance().getLargo()) && (y>=0) && (y<Logica.getInstance().getAncho()) &&
+        if((x>=0) && (x<Largo) && (y>=0) && (y<Ancho) &&
                 !getCasilla(x,y).isClick() && !getCasilla(x,y).isVisible() && !getCasilla(x,y).isOnlongclick()){
 
             getCasilla(x,y).setClick();
@@ -86,10 +109,10 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
 
                 //Descubrimos la casilla
                 getCasilla(x, y).setVisible();
-                Logica.getInstance().restarBombas();//Restamos al contador de bombas restantes
+                contBombas--;//Restamos al contador de bombas restantes
 
                 //Revisamos el numero de bombas que quedan
-                if(Logica.getInstance().getContBombas() == 0){
+                if(contBombas == 0){
                     //FIN DEL JUEGO
                     finJuego();
                 }
@@ -132,28 +155,160 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
     }
 
     public void finJuego(){
+
         //Recorre array de casillas comprobando que tenga boma para hacerlas visibles
-        for(int i=0;i<casillas.size();i++){
-            if(casillas.get(i).getBomba() == true){
-                casillas.get(i).setVisible();
+
+        for(int i=0;i<mapBoom.size();i++){
+
+            if(mapBoom.get(i).getBomba() == true){
+
+                mapBoom.get(i).setVisible();
             }
+        }
+
+        for(int i = 0; i < mapBoom.size(); i ++) {
+
+            mapBoom.get(i).setOnClickListener(null);
+            mapBoom.get(i).setOnLongClickListener(null);
         }
 
         DialogFinDelJuego();
     }
 
+    public int getValorCasilla(int pos){
+
+        int x = pos % Largo;
+        int y = pos / Largo;
+
+        return tablero[x][y];
+    }
+
     public Casilla getCasilla(int x, int y){
 
-        int pos = y * Logica.getInstance().getLargo() + x;
+        int pos = y * Largo + x;
 
-        return casillas.get(pos);
+        return mapBoom.get(pos);
+    }
+
+    public int getLargo() {
+
+        return Largo;
+    }
+
+    public void setLargo(int largo) {
+
+        Largo = largo;
+    }
+
+    public int getAncho() {
+
+        return Ancho;
+    }
+
+    public void setAncho(int ancho) {
+
+        Ancho = ancho;
+    }
+
+    public int getContBombas() {
+
+        return contBombas;
+    }
+
+    public void setContBombas(int contBombas) {
+
+        this.contBombas = contBombas;
+    }
+
+    public void CrearTablero() {
+
+        tablero = new int[Largo][Ancho];
+
+        Random num = new Random();
+
+        int nbombas = NBombas;
+
+        while(nbombas > 0){
+
+            //Posiciones x,y para colocar la bomba de forma aleatoria
+            int x = num.nextInt(Largo);
+            int y = num.nextInt(Ancho);
+
+            /*Solo pondra en aquellas posiciones que esten libres
+             * de lo conrtrario el numero de bombas no disminuye*/
+            if (tablero[x][y] != -1) {
+
+                tablero[x][y] = -1;
+                nbombas --;
+            }
+        }
+
+
+        /*Recorremos posicion por posicion para establecer su valor
+        Este valor depende del numero de bombas que tenga cerca, una casiila
+        en todas las direcciones*/
+        for (int i = 0; i < Largo; i++) {
+
+            for (int e = 0; e < Ancho; e++) {
+
+                tablero[i][e] = BuscarMinas(i,e);
+            }
+        }
+
+
+        //
+        String valor = "";
+
+        for(int i = 0; i < Ancho; i ++){
+
+            valor = " | ";
+
+            for(int e = 0; e < Largo; e ++){
+
+                valor = valor + String.valueOf(tablero[e][i]).replace("9","B") + " | ";
+            }
+            //Log.i("Bombas",valor);
+
+            valor += "\n";
+
+            System.out.print(valor);
+        }
+    }
+
+    private int BuscarMinas(int x, int y){
+
+        if(tablero[x][y] == -1){
+
+            return -1;
+        }
+
+        else {
+
+            int Nbombascercanas = 0;
+
+            for (int i = x - 1; i <= x + 1; i++) {
+
+                for (int e = y - 1; e <= y + 1; e++) {
+
+                    if(i < Largo && i >= 0 && e < Ancho && e >= 0){
+
+                        if(tablero[i][e] == -1){
+
+                            Nbombascercanas++;
+                        }
+                    }
+                }
+            }
+
+            return Nbombascercanas;
+        }
     }
 
     @Override
     public int getItemCount() {
 
         //Calculamos el numero de elementos a mostrar en el tablero
-        return Logica.getInstance().getLargo() * Logica.getInstance().getAncho();
+        return Largo * Ancho;
     }
 
     public class BuscaminasItem extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -165,7 +320,7 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
             super(itemView);
 
             casilla = itemView.findViewById(R.id.Casilla);
-            casillas.add(casilla);
+            mapBoom.add(casilla);
 
             //Establecemos los listener
             casilla.setOnLongClickListener(this);

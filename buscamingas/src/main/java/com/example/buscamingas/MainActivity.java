@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,8 +14,8 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     //Lo cambiamos: private RecyclerView.Adapter adapter;
-    private BuscaminasAdaptar adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private BuscaminasAdaptar buscaminasAdaptar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +26,23 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
         recyclerView=findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
-        Logica.getInstance().IniciarJuego(this,recyclerView);
+        buscaminasAdaptar = new BuscaminasAdaptar(this);
+
+        layoutManager = new GridLayoutManager(this,8);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(buscaminasAdaptar);
 
         //layoutManager=new LinearLayoutManager(this);
+    }
+
+    public void ReiniciarJuego(){
+
+        buscaminasAdaptar = new BuscaminasAdaptar(this);
+        recyclerView.setAdapter(buscaminasAdaptar);
+
     }
 
     @Override
@@ -52,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.instruc:
 
-
                 AlertDialog.Builder alertdialogBuilder = new AlertDialog.Builder(this);
 
                 alertdialogBuilder.setTitle("Instrucciones");
@@ -70,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 alertDialog.show();
                 return true;
             case R.id.startJuego:
+
+                ReiniciarJuego();
 
                 return true;
             case R.id.config:
