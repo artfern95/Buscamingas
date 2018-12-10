@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.buscamingas.Celdas.Casilla;
 
@@ -80,7 +79,7 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
     public void LongCLick(int x, int y){
 
         //Comprobamos que no este con click o longclick
-        if((!getCasilla(x, y).isOnlongclick()) && (!getCasilla(x, y).isVisible()) && (!getCasilla(x, y).isClick())){
+        //if((!getCasilla(x, y).isOnlongclick()) && (!getCasilla(x, y).isVisible()) && (!getCasilla(x, y).isClick())){
 
             //Si hay bomba
             if(getCasilla(x, y).getBomba() == true){//Hay bomba, se marca la bomba
@@ -99,8 +98,9 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
             //Si no hay bomba: fin del juego
             else{
 
+                finJuego();
             }
-        }
+        //}
     }
 
     public void DialogFinDelJuego(){
@@ -115,7 +115,7 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
             public void onClick(DialogInterface dialog, int which) {
 
                 //Reinicas el juego
-                Logica.getInstance().IniciarJuego();
+              //  Logica.getInstance().IniciarJuego();
             }
         });
 
@@ -177,14 +177,15 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
 
             Click(casilla.getXp(),casilla.getYp());
             //Respuesta al hacer click en la celda
-            Toast.makeText(context,"Onclick",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,"Onclick",Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public boolean onLongClick(View v) {
 
+            LongCLick(casilla.getXp(),casilla.getYp());
             //Respuesta al hacer long click en la celda
-            Toast.makeText(context,"OnLongClick",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,"OnLongClick",Toast.LENGTH_SHORT).show();
             return false;
         }
 

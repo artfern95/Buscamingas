@@ -74,7 +74,7 @@ public class Casilla extends android.support.v7.widget.AppCompatButton {
         onlongclick = false;
         click = false;
 
-        //si su valor es -1 quiere decir que es una bomba;
+        //Si su valor es -1 quiere decir que es una bomba;
 
         if(valor == -1){
 
@@ -114,6 +114,7 @@ public class Casilla extends android.support.v7.widget.AppCompatButton {
         return visible;
     }
 
+    //Método para comprobar en que estado se encuentra la casilla
     public void setVisible() {
 
         visible = true;
