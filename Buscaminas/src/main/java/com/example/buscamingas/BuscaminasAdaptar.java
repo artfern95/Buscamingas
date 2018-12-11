@@ -19,7 +19,6 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
     private LayoutInflater inflater;
     private Context context;
 
-    //
     private int Largo;
     private int Ancho;
     private int NBombas;
@@ -138,7 +137,7 @@ public class BuscaminasAdaptar extends RecyclerView.Adapter<BuscaminasAdaptar.Bu
             public void onClick(DialogInterface dialog, int which) {
 
                 //Reinicas el juego
-              //  Logica.getInstance().IniciarJuego();
+                //Logica.getInstance().IniciarJuego();
             }
         });
 

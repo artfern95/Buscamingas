@@ -66,7 +66,21 @@ public class MainActivity extends AppCompatActivity {
 
                 alertdialogBuilder.setTitle("Instrucciones");
 
-                alertdialogBuilder.setMessage("COPIAR INSTRUCCIONES");
+                alertdialogBuilder.setMessage("El juego es el clásico buscaminas:\n" +
+                        "Cuando pulsas en una casilla,\n" +
+                        "sale un número que identifica\n" +
+                        "cuántas bombas hay alrededor.\n" +
+                        "Ten cuidado, porque si pulsas\n" +
+                        "en una casilla que tenga una bomba \n" +
+                        "escondida, perderás.\n" +
+                        "Si estas seguro de que en una casilla\n" +
+                        "hay una bomba la puedes marcar\n" +
+                        "manteniendo sobre dicha casilla.\n" +
+                        "Si mantienes sobre una casilla que no \n" +
+                        "contenga una bomba, perderás.\n" +
+                        "La única forma de ganar es descubrir\n" +
+                        "todas las bombas.\n" +
+                        "Mucha suerte y a cubierto.");
 
                 alertdialogBuilder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                     @Override
